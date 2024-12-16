@@ -40,5 +40,11 @@
     "Type": 1,
     "Category": "fhjd",
     "Amount": 20000
+  },
+  {
+    "Date": "2024-09-09T00:00:00",
+    "Type": 0,
+    "Category": "hgfj",
+    "Amount": 74839
   }
 ]

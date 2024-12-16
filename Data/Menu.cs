@@ -1,4 +1,6 @@
 using ConsoleApp1.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace ConsoleApp1.Data
 {
@@ -9,8 +11,8 @@ namespace ConsoleApp1.Data
 
         public Menu(ITransactionManager transactionManager, ITrendAnalyzer trendAnalyzer)
         {
-            _transactionManager = transactionManager;  
-            _trendAnalyzer = trendAnalyzer;            
+            _transactionManager = transactionManager;
+            _trendAnalyzer = trendAnalyzer;
         }
 
         public void WriteMenu()
@@ -24,25 +26,26 @@ namespace ConsoleApp1.Data
             Console.Write("Ваш выбор операции: ");
         }
 
-        public bool ChoseAction()
+        // Сделаем метод асинхронным, потому что вызываем асинхронные методы
+        public async Task<bool> ChoseActionAsync()
         {
             var choice = Console.ReadLine();
             switch (choice)
             {
                 case "1":
-                    _transactionManager.AddIncome();
+                    await _transactionManager.AddIncomeAsync();  // Сделали асинхронным
                     return true;
                 case "2":
-                    _transactionManager.AddExpense();
+                    await _transactionManager.AddExpenseAsync();  // Сделали асинхронным
                     return true;
                 case "3":
-                    _transactionManager.GetBalance();
+                    await _transactionManager.GetBalanceAsync();  // Сделали асинхронным
                     return true;
                 case "4":
-                    _trendAnalyzer.AnalyzeTrends(_transactionManager);
+                    await _trendAnalyzer.AnalyzeTrendsAsync(_transactionManager);  // Сделали асинхронным
                     return true;
                 case "5":
-                    return false;  // Выход из программы
+                    return false; // Выход из программы
                 default:
                     Console.WriteLine("Неверный выбор. Попробуйте снова.");
                     return true;

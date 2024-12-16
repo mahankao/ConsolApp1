@@ -1,33 +1,33 @@
-using ConsoleApp1.Data;
 using ConsoleApp1.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ConsoleApp1.Data;
 
 namespace ConsoleApp1.Comands
 {
     public class TransactionManager : ITransactionManager
     {
-        private readonly IAction _actions; // Экземпляр для работы с транзакциями
-        private readonly InputChecking _checking; // Проверка ввода
-        private readonly ITransactionFileManager _transactionFileManager;
+        private readonly IAction _actions;
+        private readonly IInputChecking _checking;
 
-        public TransactionManager(IAction actions, InputChecking checking, ITransactionFileManager transactionFileManager)
+        public TransactionManager(IAction actions, IInputChecking checking)
         {
             _actions = actions;
             _checking = checking;
-            _transactionFileManager = transactionFileManager;
         }
-        
-
-        public void AddIncome()
+        public async Task AddIncomeAsync()
         {
             try
             {
-                DateTime date = _checking.GetValidDate("Введите дату дохода (гггг-мм-дд): ");
-                decimal amount = _checking.GetValidAmount("Введите сумму дохода (положительное число): ");
-                
+                DateTime date = await _checking.GetValidDateAsync("Введите дату дохода (гггг-мм-дд): ");
+                decimal amount = await _checking.GetValidAmountAsync("Введите сумму дохода (положительное число): ");
+
                 Console.WriteLine("Введите категорию дохода: ");
                 string category = Console.ReadLine();
 
-                _actions.AddTransaction(new Transaction(date, OperationType.Income, category, amount));
+                var income = new Income(date, OperationType.Income, category, amount);
+                await _actions.AddTransactionAsync(income); 
                 Console.WriteLine("Доход добавлен успешно.");
             }
             catch (InvalidUserInputException ex)
@@ -35,18 +35,19 @@ namespace ConsoleApp1.Comands
                 Console.WriteLine($"Ошибка: {ex.Message}. Повторите попытку.");
             }
         }
-
-        public void AddExpense()
+        
+        public async Task AddExpenseAsync()
         {
             try
             {
-                DateTime date = _checking.GetValidDate("Введите дату расхода (гггг-мм-дд): ");
-                decimal amount = _checking.GetValidAmount("Введите сумму расхода (положительное число): ");
+                DateTime date = await _checking.GetValidDateAsync("Введите дату расхода (гггг-мм-дд): ");
+                decimal amount = await _checking.GetValidAmountAsync("Введите сумму расхода (положительное число): ");
 
                 Console.WriteLine("Введите категорию расхода: ");
                 string category = Console.ReadLine();
 
-                _actions.AddTransaction(new Transaction(date, OperationType.Expense, category, amount));
+                var expense = new Expense(date, OperationType.Expense, category, amount);
+                await _actions.AddTransactionAsync(expense);
                 Console.WriteLine("Расход добавлен успешно.");
             }
             catch (InvalidUserInputException ex)
@@ -54,25 +55,16 @@ namespace ConsoleApp1.Comands
                 Console.WriteLine($"Ошибка: {ex.Message}. Повторите попытку.");
             }
         }
-
-        public void GetBalance()
+        
+        public async Task GetBalanceAsync()
         {
-            Console.WriteLine($"Ваш баланс: {_actions.Balance()}");
+            decimal balance = await _actions.BalanceAsync();
+            Console.WriteLine($"Ваш баланс: {balance:F2}");
         }
-
-        public List<ITransaction> GetTransactionsByDateRange(DateTime startDay, DateTime endDay)
+        
+        public async Task<List<ITransaction>> GetTransactionsByDateRangeAsync(DateTime startDay, DateTime endDay)
         {
-            return _actions.GetTransactionsByDateRange(startDay, endDay);
-        }
-
-        public async Task LoadTransactionsAsync(string filePath)
-        {
-            await _transactionFileManager.LoadTransactionsFromFileAsync(filePath);
-        }
-
-        public async Task SaveTransactionsAsync(string filePath)
-        {
-            await _transactionFileManager.SaveTransactionsToFileAsync(filePath);
+            return await _actions.GetTransactionsByDateRangeAsync(startDay, endDay);
         }
     }
-}
+} 

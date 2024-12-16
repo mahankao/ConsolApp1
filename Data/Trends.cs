@@ -2,7 +2,7 @@ using ConsoleApp1.Interfaces;
 
 namespace ConsoleApp1.Data
 {
-    public class Trends
+    public class Trends : ITrends
     {
         public DateTime startDay { get; set; }
         public DateTime endDay { get; set; }
@@ -26,9 +26,9 @@ namespace ConsoleApp1.Data
             decimal totalExpense = expenses.Sum(t => t.Amount);
             
             Console.WriteLine($"Анализ за период с {startDay.ToShortDateString()} по {endDay.ToShortDateString()}:");
-            Console.WriteLine($"Общий доход: {totalIncome}");
-            Console.WriteLine($"Общий расход: {totalExpense}");
-            Console.WriteLine($"Чистый баланс: {totalIncome - totalExpense}");
+            Console.WriteLine($"Общий доход: {totalIncome:F2}");
+            Console.WriteLine($"Общий расход: {totalExpense:F2}");
+            Console.WriteLine($"Чистый баланс: {(totalIncome - totalExpense):F2}");
         }
     }
 }

@@ -1,28 +1,25 @@
+using System.Collections.Generic;
 using ConsoleApp1.Interfaces;
 
-namespace ConsoleApp1.Data;
-
-public class TransactionList
+namespace ConsoleApp1.Data
 {
-    private List<ITransaction> transactions = new List<ITransaction>();
-
-    public void AddTransaction(ITransaction transaction)
+    public class TransactionList
     {
-        transactions.Add(transaction);
-    }
+        private readonly List<ITransaction> _transactions = new List<ITransaction>();
 
-    public void AddTransactions(IEnumerable<ITransaction> transactions)
-    {
-        this.transactions.AddRange(transactions);
-    }
-
-    public IEnumerable<ITransaction> GetAllTransactions() => transactions;
-
-    public void PrintTransactions()
-    {
-        foreach (var el in transactions)
+        public void AddTransaction(ITransaction transaction)
         {
-            Console.WriteLine(el);
+            _transactions.Add(transaction);
+        }
+
+        public List<ITransaction> GetAllTransactions()
+        {
+            return _transactions;
+        }
+
+        public void AddTransactions(IEnumerable<ITransaction> transactions)
+        {
+            _transactions.AddRange(transactions);
         }
     }
 }

@@ -6,6 +6,7 @@ public interface ITransaction
     OperationType Type { get; }
     string Category { get; }
     decimal Amount { get; }
+    int Id { get; set; }
 }
 
 public enum OperationType

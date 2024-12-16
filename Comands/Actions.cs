@@ -1,46 +1,53 @@
-using ConsoleApp1.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ConsoleApp1.Database;
 using ConsoleApp1.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace ConsoleApp1.Comands
+namespace ConsoleApp1
 {
     public class Actions : IAction
     {
-        private readonly TransactionList _transactionList;
+        private readonly ApplicationDbContext _context; //dbcontextfactory чтобы обновлялось
 
-        public Actions(TransactionList transactionList)
+        public Actions(ApplicationDbContext context)
         {
-            _transactionList = transactionList;
+            _context = context;
         }
 
-        public void AddTransaction(ITransaction transaction)
+        public async Task AddTransactionAsync(ITransaction transaction)
         {
-            _transactionList.AddTransaction(transaction);
+            await _context.Transactions.AddAsync((Transaction)transaction);
+            await _context.SaveChangesAsync();
         }
 
-        public decimal GetTotalIncome()
+        public async Task<decimal> GetTotalIncomeAsync()
         {
-            return _transactionList.GetAllTransactions()
+            return await _context.Transactions
                 .Where(t => t.Type == OperationType.Income)
-                .Sum(t => t.Amount);
+                .SumAsync(t => t.Amount);
         }
 
-        public decimal GetTotalExpense()
+        public async Task<decimal> GetTotalExpenseAsync()
         {
-            return _transactionList.GetAllTransactions()
+            return await _context.Transactions
                 .Where(t => t.Type == OperationType.Expense)
-                .Sum(t => t.Amount);
+                .SumAsync(t => t.Amount);
         }
 
-        public decimal Balance()
+        public async Task<decimal> BalanceAsync()
         {
-            return GetTotalIncome() - GetTotalExpense();
+            return await GetTotalIncomeAsync() - await GetTotalExpenseAsync();
         }
 
-        public List<ITransaction> GetTransactionsByDateRange(DateTime startDay, DateTime endDay)
+        public async Task<List<ITransaction>> GetTransactionsByDateRangeAsync(DateTime startDay, DateTime endDay)
         {
-            return _transactionList.GetAllTransactions()
+            var transactions = await _context.Transactions
                 .Where(t => t.Date >= startDay && t.Date <= endDay)
-                .ToList();
+                .ToListAsync();
+
+            return transactions.Cast<ITransaction>().ToList();
         }
         
     }

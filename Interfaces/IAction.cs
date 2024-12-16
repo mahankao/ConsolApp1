@@ -1,11 +1,12 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace ConsoleApp1.Interfaces
 {
     public interface IAction
     {
-        void AddTransaction(ITransaction transaction);
-        decimal GetTotalIncome();
-        decimal GetTotalExpense();
-        decimal Balance();
-        List<ITransaction> GetTransactionsByDateRange(DateTime startDay, DateTime endDay);
+        Task AddTransactionAsync(ITransaction transaction);
+        Task<decimal> BalanceAsync();
+        Task<List<ITransaction>> GetTransactionsByDateRangeAsync(DateTime startDay, DateTime endDay);
     }
 }

@@ -1,6 +1,7 @@
-namespace ConsoleApp1.Interfaces;
-
-public interface ITrendAnalyzer
+namespace ConsoleApp1.Interfaces
 {
-    void AnalyzeTrends(ITransactionManager transactionManager); // Измените тип параметра на интерфейс
+    public interface ITrendAnalyzer
+    {
+        Task AnalyzeTrendsAsync(ITransactionManager transactionManager); // Изменен на асинхронный
+    }
 }

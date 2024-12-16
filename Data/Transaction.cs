@@ -1,14 +1,17 @@
 using ConsoleApp1.Interfaces;
 
-namespace ConsoleApp1.Data;
-
-public record Transaction : ITransaction
+public class Transaction : ITransaction
 {
-    public DateTime Date { get; }
-    public OperationType Type { get; }
-    public string Category { get; }
-    public decimal Amount { get; }
+    public int Id { get; set; }
+    public DateTime Date { get; set; }
+    public OperationType Type { get; set; }
+    public string Category { get; set; }
+    public decimal Amount { get; set; }
 
+    // Параметрless конструктор, необходимый для EF
+    public Transaction() {}
+
+    // Конструктор с параметрами
     public Transaction(DateTime date, OperationType type, string category, decimal amount)
     {
         Date = date;

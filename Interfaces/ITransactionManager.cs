@@ -1,9 +1,10 @@
-namespace ConsoleApp1.Interfaces;
-
-public interface ITransactionManager
+namespace ConsoleApp1.Interfaces
 {
-    void AddIncome(); // Добавить доход
-    void AddExpense(); // Добавить расход
-    void GetBalance(); // Получить текущий баланс
-    List<ITransaction> GetTransactionsByDateRange(DateTime startDay, DateTime endDay);
+    public interface ITransactionManager
+    {
+        Task AddIncomeAsync(); // Добавить доход
+        Task AddExpenseAsync(); // Добавить расход
+        Task GetBalanceAsync(); // Получить текущий баланс
+        Task<List<ITransaction>> GetTransactionsByDateRangeAsync(DateTime startDay, DateTime endDay); // Асинхронно получить транзакции по диапазону дат
+    }
 }
