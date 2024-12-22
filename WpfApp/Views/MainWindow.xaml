@@ -1,0 +1,54 @@
+﻿<Window x:Class="WpfApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Transaction Manager" Height="450" Width="800"
+        Background="#F4F0F8">
+    <Grid Margin="10">
+        <!-- Определяем строки для структуры -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />  <!-- Для заголовка -->
+            <RowDefinition Height="Auto" />  <!-- Для кнопок -->
+            <RowDefinition Height="*" />     <!-- Для таблицы -->
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Transaction Manager" FontSize="24" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,20" Foreground="#8A2BE2" />
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <Button Content="Load Transactions" Width="150" Height="35" Margin="5,0,5,0"
+                    Background="#8A2BE2" Foreground="White" Command="{Binding LoadTransactionsCommand }"/>
+            <Button Content="Add Transaction" Width="150" Height="35" Margin="5,0,5,0"
+                    Background="#8A2BE2" Foreground="White" Command="{Binding AddTransactionCommand }" />
+            <Button Content="Update Transaction" Width="150" Height="35" Margin="5,0,5,0"
+                    Background="#8A2BE2" Foreground="White" Command="{Binding UpdateTransactionCommand }"/>
+            <Button Content="Delete Transaction" Width="150" Height="35" Margin="5,0,5,0"
+                    Background="#8A2BE2" Foreground="White" Command="{Binding DeleteTransactionCommand }"/>
+        </StackPanel>
+
+        <!-- Таблица -->
+        <DataGrid x:Name="TransactionsDataGrid" 
+                  Grid.Row="2" 
+                  ItemsSource="{Binding Transactions}" 
+                  SelectedItem="{Binding SelectedTransaction}" 
+                  AutoGenerateColumns="False" 
+                  SelectionMode="Single" 
+                  Margin="0,10,0,10" 
+                  Background="White"
+                  BorderBrush="#8A2BE2" 
+                  BorderThickness="2" 
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" 
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="150" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100" />
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="150" />
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="100" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
